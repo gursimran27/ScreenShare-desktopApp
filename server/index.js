@@ -24,6 +24,7 @@ io.on('connection', (socket)=> {
         var room = data.room;
         var imgStr = data.image;
         socket.broadcast.to(room).emit('screen-data', imgStr);
+        console.log("receiverd screen data")
     })
 
     socket.on("end-session", function(uuid) {

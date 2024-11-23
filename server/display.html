@@ -39,8 +39,8 @@
           return;
         }
 
-        if(room.trim().length == 0){
-          alert('Room ID is mandatory to join');
+        if (room.trim().length == 0) {
+          alert("Room ID is mandatory to join");
           window.location.href = "https://screenshare-desktopapp.onrender.com/";
           return;
         }
@@ -55,27 +55,6 @@
           alert("session ended😊");
           window.location.href = "https://screenshare-desktopapp.onrender.com/";
         });
-
-        // $("img").mousemove(function (e) {
-        //   var posX = $(this).offset().left;
-        //   var posY = $(this).offset().top;
-
-        //   var x = e.pageX - posX;
-        //   var y = e.pageY - posY;
-
-        //   var obj = { x: x, y: y, room: room };
-        //   socket.emit("mouse-move", JSON.stringify(obj));
-        // });
-
-        // $("img").click(function (e) {
-        //   var obj = { room: room };
-        //   socket.emit("mouse-click", JSON.stringify(obj));
-        // });
-
-        // $(window).bind("keyup", function (e) {
-        //   var obj = { key: e.key, room: room };
-        //   socket.emit("type", JSON.stringify(obj));
-        // });
       };
     </script>
   </body>
