@@ -28,6 +28,7 @@ io.on('connection', (socket)=> {
 
     socket.on("end-session", function(uuid) {
         socket.broadcast.to(uuid).emit('end-session');
+        console.log("User ended session : " + uuid);
     })
 })
 
