@@ -5,7 +5,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const { v4: uuidv4 } = require("uuid");
 const screenshot = require("screenshot-desktop");
 
-var socket = require("socket.io-client")("http://127.0.0.1:5000");
+var socket = require("socket.io-client")("https://screenshare-desktopapp.onrender.com/");
 var interval;
 let uuid;
 
