@@ -5,7 +5,9 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const { v4: uuidv4 } = require("uuid");
 const screenshot = require("screenshot-desktop");
 
-var socket = require("socket.io-client")("https://screenshare-desktopapp.onrender.com/");
+var socket = require("socket.io-client")(
+  "https://screenshare-desktopapp.onrender.com/"
+);
 var interval;
 let uuid;
 
@@ -15,8 +17,8 @@ const createWindow = () => {
     width: 500,
     height: 150,
     webPreferences: {
-      nodeIntegration: true,// Required for `require('electron')` in renderer
-      contextIsolation: false,// Allows access to Electron APIs
+      nodeIntegration: true, // Required for `require('electron')` in renderer
+      contextIsolation: false, // Allows access to Electron APIs
     },
   });
 
@@ -27,8 +29,7 @@ const createWindow = () => {
   win.loadFile("./index.html");
 
   // Open the DevTools.
-  //   win.webContents.openDevTools()
-
+  // win.webContents.openDevTools()
 };
 
 // This method will be called when Electron has finished
@@ -52,24 +53,31 @@ app.on("window-all-closed", () => {
 });
 
 ipcMain.on("start-share", function (event, arg) {
-  uuid =  uuidv4();
+  uuid = uuidv4();
   socket.emit("join-message", uuid);
   event.reply("uuid", uuid);
 
   interval = setInterval(function () {
-    screenshot().then((img) => {
-      var imgStr = Buffer.from(img).toString("base64");
+    // console.log("Interval triggered"); //print in VsCode termical not console
+    screenshot()
+      .then((img) => {
+        var imgStr = Buffer.from(img).toString("base64");
+        // throw new Error; //testing purposes only
+        var obj = {};
+        obj.room = uuid;
+        obj.image = imgStr;
 
-      var obj = {};
-      obj.room = uuid;
-      obj.image = imgStr;
-
-      socket.emit("screen-data", JSON.stringify(obj));
-    });
+        socket.emit("screen-data", JSON.stringify(obj));
+      })
+      .catch((err) => {
+        console.error("Screenshot error:", err); //it will print in VsCode termical not console
+        event.reply("error", "ScreenShare failed: " + err.message);
+        clearInterval(interval);
+      });
   }, 500);
 });
 
 ipcMain.on("stop-share", function (event, arg) {
-  socket.emit("end-session",uuid );
+  socket.emit("end-session", uuid);
   clearInterval(interval);
 });
